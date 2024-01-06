@@ -502,7 +502,7 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
       alert("Driver name is required");
     } else if (vehicleNo.trim() == "") {
       alert("Vehicle no is required");
-    } else if (confirm("Are you sure?")) {
+    } else if (true) {
       if (firstWeight && secondWeight) {
         if (secondWeight <= firstWeight) {
           alert("Second weight should be greater than first weight");
