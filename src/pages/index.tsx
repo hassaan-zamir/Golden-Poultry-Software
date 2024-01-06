@@ -820,7 +820,8 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
 
         {rowid && <section id="action-buttons">
           <button
-            onClick={() => {
+            onClick={async () => {
+              await updateInvoice();
               setPrintDeliveryChallan(true);
             }}
             className="btn success-btn"
@@ -831,7 +832,8 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
           <button
             className="btn info-btn"
             // href={`/delivery-challan/${rowid}`}
-            onClick={() => {
+            onClick={async () => {
+              await updateInvoice();
               setPrintDeliveryChallan(true);
             }}
           >
