@@ -53,9 +53,15 @@ export default async function handler(
       },
     });
 
+    const invoices = await prisma.invoice.findMany({
+      orderBy: {
+        id: "desc"
+      }
+    });
+
     res
       .status(200)
-      .json({ message: "Invoice updated successfully", invoice: updatedInvoice });
+      .json({ message: "Invoice updated successfully", invoices: invoices });
   } catch (error) {
     console.error("Error updating invoice:", error);
     res.status(500).json({ message: "Error updating invoice" });

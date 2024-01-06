@@ -21,7 +21,13 @@ export default async function handler(
       },
     });
 
-    res.status(200).json({ message: "Invoice deleted successfully" });
+    const invoices = await prisma.invoice.findMany({
+      orderBy: {
+        id: "desc"
+      }
+    });
+
+    res.status(200).json({ message: "Invoice deleted successfully", invoices:invoices });
   } catch (error) {
     console.error("Error deleting invoice:", error);
     res.status(500).json({ message: "Error deleting invoice" });

@@ -447,9 +447,9 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
           paid: paid ? 1 : 0,
         });
 
-        if (resp.data.invoice) {
+        if (resp.data.invoices) {
           toast.success('Invoice created successfully');
-          router.refresh();
+          setMutatedInvoices(resp.data.invoices);
           
         }
       } catch (e) {
@@ -482,7 +482,7 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
           id: rowid,
         });
         toast.success('Invoice deleted successfully');
-        router.refresh();
+        setMutatedInvoices(resp.data.invoices)
       } catch (e) {
         alert("Could not delete invoice. Please try again");
         console.log("Error while deleteing an invoice", e);
@@ -528,9 +528,9 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
           paid: paid ? 1 : 0,
         });
 
-        if (resp.data.invoice) {
+        if (resp.data.invoices) {
           toast.success("Invoice Updated successfully");
-          router.refresh();
+          setMutatedInvoices(resp.data.invoices);
          
         }
       } catch (e) {
