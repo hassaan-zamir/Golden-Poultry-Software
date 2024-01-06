@@ -95,9 +95,9 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
   const [paid, setPaid] = useState<boolean>(false);
   const [commission, setCommission] = useState<number>();
 
-  const findInvoice = (i:number):InvoiceType | null => {
+  const findInvoice = (i:number, searchInvoices:InvoiceType[]):InvoiceType | null => {
     let invoice:InvoiceType | null = null;
-    invoices.map((inv) => {
+    searchInvoices.map((inv) => {
       if(inv.id == i){
         invoice=inv;
       }
@@ -855,8 +855,8 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
 
       </main>
       <ToastContainer />
-      {rowid && <DeliveryChallan invoice={findInvoice(rowid)} printInvoice={printDeliveryChallan} setPrintInvoice={setPrintDeliveryChallan}/>}
-      {rowid && <AdvanceSlip invoice={findInvoice(rowid)} printInvoice={printAdvanceChallan} setPrintInvoice={setPrintAdvanceChallan}/>}
+      {rowid && <DeliveryChallan invoice={findInvoice(rowid, mutatedInvoices)} printInvoice={printDeliveryChallan} setPrintInvoice={setPrintDeliveryChallan}/>}
+      {rowid && <AdvanceSlip invoice={findInvoice(rowid, mutatedInvoices)} printInvoice={printAdvanceChallan} setPrintInvoice={setPrintAdvanceChallan}/>}
     </>
   );
 }
