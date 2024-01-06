@@ -1,0 +1,20 @@
+body , * {
+  padding:0 !important;
+  margin:0 !important;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif !important;
+  background:#fff !important;
+  color:#000 !important;
+}
+
+table td, table th {
+  white-space: nowrap;
+}
+
+.printBtn {
+  padding : 5px 10px;
+  background:lightblue;
+  color:white;
+  font-weight:bold;
+  font-size:20px;
+}

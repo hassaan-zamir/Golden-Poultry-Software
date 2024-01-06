@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model brokers {
+  id   Int    @id @default(autoincrement())
+  name String @unique(map: "broker_unique") @db.VarChar(200)
+}
+
+model house {
+  id       Int    @id @default(autoincrement())
+  shed_id  Int
+  house_no String @db.VarChar(50)
+  sheds    sheds  @relation(fields: [shed_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_house")
+
+  @@unique([shed_id, house_no], map: "shed_id")
+}
+
+model invoice {
+  id            Int     @id @default(autoincrement())
+  vehicle_no    String  @db.VarChar(200)
+  date          String? @db.VarChar(200)
+  shed          String? @db.VarChar(300)
+  house_no      String? @db.VarChar(100)
+  broker_name   String  @db.VarChar(300)
+  driver_name   String  @db.VarChar(300)
+  first_weight  Float?
+  second_weight Float?
+  todays_rate   Float?
+  add_less      Float?
+  cash          Int?
+  online        Int?
+  commission    Int?
+  paid          Int     @default(0) @db.TinyInt
+}
+
+model sheds {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(300)
+  house house[]
+}

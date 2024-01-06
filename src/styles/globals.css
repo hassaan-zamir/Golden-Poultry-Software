@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
+
+
+body {
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    color:white;
+}
+
+
+.text-center {
+  text-align: center;
+}
+/* .success-btn {
+    background:#24a0ed;
+
+    color:white;
+}
+
+.danger-btn {
+    background: #db5f12;
+
+    color:white;
+}
+
+.grey-btn {
+  background: #ccc;
+
+  color:white;
+}
+
+.info-btn {
+    background: #ffc107;
+
+    color:white;
+} */
+
+.warning {
+  color:red;
+}
+
+.add-btn{
+  background:white;
+  color:black;
+  padding: 0px 10px;
+  font-weight: 900;
+  font-size:24px;
+}
+
+#invoice-form {
+  width:90%;
+  margin-right:auto;
+  margin-left:auto;
+  text-align: center;
+
+}
+
+#invoice-form th{
+  padding: 15px;
+}
+
+#invoice-form tr td{
+  padding: 5px 10px;
+
+}
+
+#invoice-form .form-group {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+#invoice-form .form-group input, #invoice-form .form-group select {
+  height:25px;
+  padding:2px 8px;
+  border-radius:5px;
+  border-color:#fff;
+}
+
+@media screen and (max-width: 768px) {
+  #invoice-form tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; /* Optional: Add borders between rows */
+  }
+
+  #invoice-form tr td {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+  }
+
+  #invoice-form th {
+    display: none; /* Hide table headers on small screens */
+  }
+
+  /* Adjust specific columns to span full width on smaller screens */
+  #invoice-form tr:nth-child(odd) td,
+  #invoice-form tr:nth-child(odd) td input,
+  #invoice-form tr:nth-child(odd) td select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+#table{
+  margin-top: 40px;
+  width:90%;
+  margin-right:auto;
+  margin-left:auto;
+}
+
+#action-buttons {
+    width:80%;
+    margin-right:auto;
+    margin-left:auto;
+    display:flex;
+    justify-content: center;
+    gap:30px;
+    align-items: center;
+    margin-top:25px;
+}
+
+#action-buttons button , .btn{
+
+    border-radius:5px;
+    font-size:16px;
+    font-weight:800;
+    border:2px solid #fff;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#table div {
+  overflow:visible;
+}
+
+.challanNoCell {
+  text-decoration: underline;
+  color:#24a0ed;
+}
+
+.filterBox {
+  width:100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filterBox input {
+  padding:2px 4px;
+  width:300px;
+  height:30px;
+}
+
+.print-table {
+  position: absolute;
+  z-index:-10;
+  top:0;
+}
+
+
+.print-table td, .print-table th {
+  white-space: nowrap;
+}
+
+main {
+  position:absolute;
+  z-index:2;
+  background:#3a3b3c;
+  width:100vw;
+}
