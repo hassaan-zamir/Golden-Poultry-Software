@@ -822,7 +822,7 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
           <button
             onClick={async () => {
               await updateInvoice();
-              setPrintDeliveryChallan(true);
+              setPrintAdvanceChallan(true);
             }}
             className="btn success-btn"
             // href={`/advance-slip/${rowid}`}
