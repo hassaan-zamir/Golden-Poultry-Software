@@ -248,6 +248,16 @@ export default function Home({ invoices, sheds }: PropTypes) {
                 </td>
 
                 <td colSpan={2}>
+                  <span>{numberWithCommas(totalOnline(filteredInvoices))}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td colSpan={2}>
+                  <b>Total Credit</b>
+                </td>
+
+                <td colSpan={2}>
                   <span>{numberWithCommas(getBalance(filteredInvoices))}</span>
                 </td>
               </tr>
