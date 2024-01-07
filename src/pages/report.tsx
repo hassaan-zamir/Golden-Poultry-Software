@@ -126,6 +126,18 @@ export default function Home({ invoices, sheds }: PropTypes) {
     return sum;
   }
 
+  const totalOnline = (invoices: InvoiceType[]): number => {
+    let sum = 0;
+    invoices.map(inv => {
+      sum+=inv.online;
+    })
+    return sum;
+  }
+
+  const getNetCash = (invoices: InvoiceType[]): number => {
+    return getTotalAmount(invoices)+getTotalCommission(invoices)-getBalance(invoices)-totalOnline(invoices);
+  }
+
   return (
     <>
       <Head>
@@ -261,7 +273,7 @@ export default function Home({ invoices, sheds }: PropTypes) {
                 </td>
 
                 <td colSpan={2}>
-                  <span>0</span>
+                  <span>{numberWithCommas(getNetCash(filteredInvoices))}</span>
                 </td>
               </tr>
 
