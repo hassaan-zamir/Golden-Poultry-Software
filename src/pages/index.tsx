@@ -37,12 +37,12 @@ const App = () => (
     </div>
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Box link="/home" text="Sales Register" />
+        <Box link="/home" text="Delivery Challan" />
         <Box link="/dsr" text="DSR" />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <Box link="/broker-report" text="Commision Report" />
-        <Box link="/final-report" text="Final Report" />
+        <Box link="/sales-register" text="Sales Register" />
       </div>
     </div>
   </div>
