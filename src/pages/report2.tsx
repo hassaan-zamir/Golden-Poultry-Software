@@ -157,6 +157,7 @@ export default function Home({  allInvoices }: PropTypes) {
         <table cellSpacing={10} cellPadding={4} >
             <thead>
                 <tr>
+                    <th>Broker name</th>
                     <th>Driver Name</th>
                     <th>Vehicle Number</th>
                     <th>Cash</th>
@@ -173,6 +174,7 @@ export default function Home({  allInvoices }: PropTypes) {
                 {invoices.map((invoice, i) => {
 
                 return <tr key={i}>
+                    <td>{invoice.broker_name}</td>
                     <td>{invoice.driver_name}</td>
                     <td>{invoice.vehicle_no}</td>
                     <td>{invoice.cash}</td>
