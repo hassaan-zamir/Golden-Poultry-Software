@@ -1,9 +1,6 @@
-/* eslint-disable @next/next/no-css-tags */
-import axios from "axios";
-import { useRouter } from "next/router";
+
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { InvoiceType } from "@/pages";
-import Head from "next/head";
+import { InvoiceType } from "@/pages/home";
 import { useReactToPrint } from "react-to-print";
 
 interface AdvanceChallanPropTypes {

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-css-tags */
 
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { InvoiceType } from "@/pages";
+import { InvoiceType } from "@/pages/home";
 import { useReactToPrint } from "react-to-print";
 
 interface DeliveryChallanPropTypes {

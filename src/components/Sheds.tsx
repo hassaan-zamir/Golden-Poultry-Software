@@ -1,4 +1,4 @@
-import { ShedsMasterDataType } from "@/pages";
+import { ShedsMasterDataType } from "@/pages/home";
 import axios from "axios";
 
 

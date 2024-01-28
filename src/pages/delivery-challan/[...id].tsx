@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { InvoiceType } from "..";
+import { InvoiceType } from "../home";
 import Head from "next/head";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";

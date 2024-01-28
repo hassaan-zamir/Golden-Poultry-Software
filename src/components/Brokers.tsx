@@ -1,4 +1,4 @@
-import { BrokerType } from "@/pages";
+import { BrokerType } from "@/pages/home";
 import axios from "axios";
 
 interface PropTypes {
