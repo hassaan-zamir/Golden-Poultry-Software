@@ -71,6 +71,9 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
           inv.shed === shed &&
           inv.broker_name === brokerName
       );
+
+      filteredInvoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
       setFilteredInvoices(filteredInvoices);
 
       if (filteredInvoices.length > 0) {
@@ -232,10 +235,13 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
               {filteredInvoices.map((fi, i) => (
                 <tr key={i}>
                   <td colSpan={2}>
-                    <b>{new Date(fi.date).toISOString().substr(0, 10)}</b>
+                    <span>{new Date(fi.date).toISOString().substr(0, 10)}</span>
                   </td>
 
-                  <td colSpan={2}>
+                  <td>
+                    <span>{fi.vehicle_no}</span>
+                  </td>
+                  <td colSpan={1}>
                     <span>{numberWithCommas(fi.commission)}</span>
                   </td>
                 </tr>
