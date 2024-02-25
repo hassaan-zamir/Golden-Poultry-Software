@@ -41,6 +41,7 @@ const App = () => (
         <Box link="/dsr" text="DSR" />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <Box link="/credit-report" text="Credit Report" />
         <Box link="/broker-report" text="Commision Report" />
         <Box link="/sales-register" text="Sales Register" />
       </div>
