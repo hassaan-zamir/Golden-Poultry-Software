@@ -31,6 +31,20 @@ export default async function handler(
     } = req.body;
 
     // Use Prisma to create a new invoice
+
+    const checkInvoice = await prisma.invoice.findFirst({
+      where:{
+        date,
+        vehicle_no
+      }
+    });
+
+    if(checkInvoice){
+      return res.status(500).json({
+        message: 'Vehicle number already added in this data'
+      });
+    }
+
     const newInvoice = await prisma.invoice.create({
       data: {
         vehicle_no,

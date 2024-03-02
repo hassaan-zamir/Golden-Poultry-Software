@@ -453,8 +453,8 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
           setMutatedInvoices(resp.data.invoices);
           
         }
-      } catch (e) {
-        alert("Could not create invoice. Please try again");
+      } catch (e: any) {
+        alert(e?.response?.data?.message ?? "Could not create invoice. Please try again");
         console.log("Error while adding new invoice", e);
       }
     }

@@ -81,7 +81,7 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
         (inv) =>
           dateCheck(inv.date, startingDate, endingDate) &&
           inv.shed === shed &&
-          (inv.broker_name === brokerName || brokerName=== 'allbroker')
+          (inv.broker_name === brokerName || brokerName=== 'All Brokers')
       );
 
       filteredInvoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -129,7 +129,7 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
           textAlign: "center",
         }}
       >
-        <h1>Comission Report</h1>
+        <h1>Commission Report</h1>
         <section
           className="text-center"
           style={{
@@ -188,7 +188,7 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
               }}
               defaultValue={brokerName}
             >
-              <option value="allbroker">All brokers</option>
+              <option value="All Brokers">All brokers</option>
               {brokers.map((broker, i) => (
                 <option key={i} value={broker.name}>
                   {broker.name}
@@ -238,6 +238,15 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
                 </tr>
 
                 <tr>
+                  <th colSpan={2}>Broker</th>
+                  <th colSpan={2}>Shed</th>
+                </tr>
+                <tr>
+                  <td colSpan={2}>{brokerName}</td>
+                  <td colSpan={2}>{shed}</td>
+                </tr>
+
+                <tr>
                   <th colSpan={2}>Date</th>
                   {isSummary ? <th colSpan={2}>Commission</th> : <>
                     <th>Vehicle</th>
@@ -259,7 +268,8 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
                   ))
                 ) : (
                   filteredInvoices.map((invoice, i) => (
-                    <tr key={i}>
+                    <>
+                    {invoice.commission > 0 && <tr key={i}>
                       <td colSpan={2}>
                         <span>{invoice.date.substring(0, 10)}</span>
                       </td>
@@ -269,7 +279,8 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
                       <td colSpan={1}>
                         <span>{numberWithCommas(invoice.commission)}</span>
                       </td>
-                    </tr>
+                    </tr>}
+                    </>
                   ))
                 )}
 
