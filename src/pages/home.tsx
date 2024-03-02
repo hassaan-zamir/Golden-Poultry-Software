@@ -477,7 +477,7 @@ export default function Home({ sheds, invoices, brokers }: PropTypes) {
       return;
     }
 
-    if (confirm("Are you sure?")) {
+    if (prompt("Enter password: ") === "786") {
       try {
         const resp = await axios.post("/api/deleteInvoice", {
           id: rowid,
