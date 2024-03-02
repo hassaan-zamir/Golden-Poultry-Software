@@ -81,7 +81,7 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
         (inv) =>
           dateCheck(inv.date, startingDate, endingDate) &&
           inv.shed === shed &&
-          inv.broker_name === brokerName
+          (inv.broker_name === brokerName || brokerName=== 'allbroker')
       );
 
       filteredInvoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -188,6 +188,7 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
               }}
               defaultValue={brokerName}
             >
+              <option value="allbroker">All brokers</option>
               {brokers.map((broker, i) => (
                 <option key={i} value={broker.name}>
                   {broker.name}
@@ -238,7 +239,11 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
 
                 <tr>
                   <th colSpan={2}>Date</th>
-                  <th colSpan={2}>{isSummary ? "Total Commission" : "Vehicle No"}</th>
+                  {isSummary ? <th colSpan={2}>Total Commission</th> : <>
+                    <th>Vehicle No</th>
+                    <th>Total Commission</th>
+                  </>}
+                 
                 </tr>
 
                 {isSummary ? (

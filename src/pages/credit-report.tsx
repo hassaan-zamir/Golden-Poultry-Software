@@ -261,7 +261,11 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
 
                 <tr>
                   <th colSpan={2}>Date</th>
-                  <th colSpan={2}>{isSummary ? "Total Credit" : "Vehicle No"}</th>
+                  {isSummary ? <th colSpan={2}>Total Credit</th> : <>
+                    <th>Vehicle No</th>
+                    <th>Total Credit</th>
+                  </>}
+
                 </tr>
 
                 {isSummary ? (
