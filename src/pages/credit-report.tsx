@@ -103,7 +103,7 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
         (inv) =>
           dateCheck(inv.date, startingDate, endingDate) &&
           inv.shed === shed &&
-          (inv.broker_name === brokerName || brokerName === "allBroker")
+          (inv.broker_name === brokerName || brokerName === "allbroker")
       );
 
       filteredInvoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
