@@ -65,10 +65,12 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
   };
 
   const calculateCredit = (invoices: InvoiceType[]) => {
-    return invoices.map(invoice => ({
-      date: invoice.date.substring(0, 10),
-      credit: invoice.paid ? 0 : ((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash)
-    }));
+    let summary:Record<string,number> = {};
+    invoices.map(invoice => {
+      const old = summary[invoice.date.substring(0, 10)] ??  0;
+      summary[invoice.date.substring(0, 10)] = old + (invoice.paid ? 0 : ((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash));
+    });
+    return summary;
   };
 
   const fetchInvoices = () => {
@@ -235,13 +237,13 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
                 </tr>
 
                 {isSummary ? (
-                  calculateCredit(filteredInvoices).map((summary, i) => (
+                  Object.entries(calculateCredit(filteredInvoices)).map(([d, c], i) => (
                     <tr key={i}>
                       <td colSpan={2}>
-                        <span>{summary.date}</span>
+                        <span>{d}</span>
                       </td>
                       <td colSpan={2}>
-                        <span>{numberWithCommas(summary.credit)}</span>
+                        <span>{numberWithCommas(c)}</span>
                       </td>
                     </tr>
                   ))
