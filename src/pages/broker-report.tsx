@@ -239,9 +239,9 @@ export default function BrokerReport({ invoices, sheds, brokers }: PropTypes) {
 
                 <tr>
                   <th colSpan={2}>Date</th>
-                  {isSummary ? <th colSpan={2}>Total Commission</th> : <>
-                    <th>Vehicle No</th>
-                    <th>Total Commission</th>
+                  {isSummary ? <th colSpan={2}>Commission</th> : <>
+                    <th>Vehicle</th>
+                    <th>Commission</th>
                   </>}
                  
                 </tr>

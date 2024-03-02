@@ -94,7 +94,11 @@ export default function Home({ invoices, sheds }: PropTypes) {
   const getNetWeight = (invoices: InvoiceType[]): number => {
     let sum = 0;
     invoices.map((inv) => {
-      sum += (inv.second_weight - inv.first_weight);
+      
+        if(inv.second_weight && inv.second_weight > inv.first_weight){
+          sum+= inv.second_weight-inv.first_weight;
+        }
+       
     })
     return sum;
   };

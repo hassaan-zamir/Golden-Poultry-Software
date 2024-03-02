@@ -84,7 +84,10 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
 
 
   const getNetWeight = (invoice:InvoiceType): number => {
-    return invoice.second_weight-invoice.first_weight;
+    if(invoice.second_weight && invoice.second_weight > invoice.first_weight){
+      return invoice.second_weight-invoice.first_weight;
+    }
+    return 0;
   };
 
   const calculateCredit = (invoices: InvoiceType[]) => {
@@ -261,9 +264,9 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
 
                 <tr>
                   <th colSpan={2}>Date</th>
-                  {isSummary ? <th colSpan={2}>Total Credit</th> : <>
-                    <th>Vehicle No</th>
-                    <th>Total Credit</th>
+                  {isSummary ? <th colSpan={2}>Credit</th> : <>
+                    <th>Vehicle</th>
+                    <th>Credit</th>
                   </>}
 
                 </tr>
