@@ -67,7 +67,7 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
   const calculateCredit = (invoices: InvoiceType[]) => {
     return invoices.map(invoice => ({
       date: invoice.date.substring(0, 10),
-      credit: ((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash)
+      credit: invoice.paid ? 0 : ((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash)
     }));
   };
 
@@ -98,7 +98,7 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
   }
 
   const getTotalCredit = (invoices: InvoiceType[]): number => {
-    return invoices.reduce((total, invoice) => total + (((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash)), 0);
+    return invoices.reduce((total, invoice) => total + invoice.paid ? 0 : (((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash)), 0);
   };
 
   return (
