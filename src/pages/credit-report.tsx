@@ -64,11 +64,34 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
     return actual >= start && actual <= end;
   };
 
+  const getFinalRate = (invoice: InvoiceType): number => {
+    return invoice.todays_rate + invoice.add_less;
+  };
+
+  const getTotalAdvance = (invoice:InvoiceType): number => {
+    return invoice.online+invoice.cash;
+  };
+  const getTotalAmount = (invoice:InvoiceType): number => {
+    return getFinalRate(invoice) * getNetWeight(invoice);
+  };
+
+  const getCredit = (invoice:InvoiceType): number => {
+    if(invoice.paid){
+      return 0;
+    }
+    return getTotalAmount(invoice) - getTotalAdvance(invoice);
+  };
+
+
+  const getNetWeight = (invoice:InvoiceType): number => {
+    return invoice.second_weight-invoice.first_weight;
+  };
+
   const calculateCredit = (invoices: InvoiceType[]) => {
     let summary:Record<string,number> = {};
     invoices.map(invoice => {
       const old = summary[invoice.date.substring(0, 10)] ??  0;
-      summary[invoice.date.substring(0, 10)] = old + (invoice.paid ? 0 : ((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash));
+      summary[invoice.date.substring(0, 10)] = old + getCredit(invoice);
     });
     return summary;
   };
@@ -100,7 +123,11 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
   }
 
   const getTotalCredit = (invoices: InvoiceType[]): number => {
-    return invoices.reduce((total, invoice) => total + (invoice.paid ? 0 : (((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash))), 0);
+    let total = 0;
+    invoices.map((invoice) => {
+      total+= getCredit(invoice)
+    });
+    return total;
   };
 
   return (
