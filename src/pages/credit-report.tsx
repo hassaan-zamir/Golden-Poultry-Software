@@ -103,7 +103,7 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
         (inv) =>
           dateCheck(inv.date, startingDate, endingDate) &&
           inv.shed === shed &&
-          inv.broker_name === brokerName
+          (inv.broker_name === brokerName || brokerName === "allBroker")
       );
 
       filteredInvoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -210,6 +210,7 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
               }}
               value={brokerName}
             >
+              <option value='allbroker'>All brokers</option>
               {brokers.map((broker, i) => (
                 <option key={i} value={broker.name}>
                   {broker.name}
@@ -275,8 +276,8 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
                     </tr>
                   ))
                 ) : (
-                  filteredInvoices.map((invoice, i) => (
-                    <tr key={i}>
+                  filteredInvoices.map((invoice, i) => {
+                    return <>{getCredit(invoice) > 0 && <tr key={i}>
                       <td colSpan={2}>
                         <span>{invoice.date.substring(0, 10)}</span>
                       </td>
@@ -284,10 +285,10 @@ export default function CreditReport({ invoices, sheds, brokers }: PropTypes) {
                         <span>{invoice.vehicle_no}</span>
                       </td>
                       <td colSpan={1}>
-                        <span>{numberWithCommas(((invoice.todays_rate + invoice.add_less) * (invoice.second_weight - invoice.first_weight)) - (invoice.online + invoice.cash))}</span>
+                        <span>{numberWithCommas(getCredit(invoice))}</span>
                       </td>
-                    </tr>
-                  ))
+                    </tr>}</>
+                  })
                 )}
 
                 {!isSummary && (
