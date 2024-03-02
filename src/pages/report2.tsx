@@ -121,6 +121,11 @@ export default function Home({  allInvoices }: PropTypes) {
   const getTotalAdvance = (invoice:InvoiceType): number => {
     return invoice.online+invoice.cash;
   };
+
+  const getNetWeight = (invoice:InvoiceType): number => {
+    return invoice.second_weight-invoice.first_weight;
+  };
+
   const getTotalAmount = (invoice:InvoiceType): number => {
     return getFinalRate(invoice) * getNetWeight(invoice);
   };
@@ -131,12 +136,6 @@ export default function Home({  allInvoices }: PropTypes) {
     }
     return getTotalAmount(invoice) - getTotalAdvance(invoice);
   };
-
-
-  const getNetWeight = (invoice:InvoiceType): number => {
-    return invoice.second_weight-invoice.first_weight;
-  };
-
 
 
 
