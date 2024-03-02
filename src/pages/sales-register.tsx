@@ -132,12 +132,11 @@ export default function Home({  allInvoices }: PropTypes) {
     return getTotalAmount(invoice) - getTotalAdvance(invoice);
   };
 
+
   const getNetWeight = (invoice:InvoiceType): number => {
-    if(invoice.second_weight && invoice.second_weight > invoice.first_weight){
-      return invoice.second_weight-invoice.first_weight;
-    }
-    return 0;
+    return invoice.second_weight-invoice.first_weight;
   };
+
 
 
 
