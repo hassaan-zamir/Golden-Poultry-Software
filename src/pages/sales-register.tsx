@@ -8,10 +8,17 @@ export async function getServerSideProps() {
     process.env.NEXT_PUBLIC_BASE_URL + "/api/getMasterData"
   );
   const allInvoices = res.data.invoices;
-  console.log(allInvoices.length, 'hi');
+  const sheds: string[] = [];
+
+  allInvoices.map((inv: InvoiceType) => {
+    if (!sheds.includes(inv.shed)) {
+      sheds.push(inv.shed);
+    }
+  });
 
 
-  return { props: { allInvoices: allInvoices } };
+
+  return { props: { allInvoices , sheds } };
 }
 
 
@@ -36,11 +43,13 @@ export interface InvoiceType {
 
 interface PropTypes {
   allInvoices: InvoiceType[];
+  sheds: string[];
 }
 
 
-export default function Home({  allInvoices }: PropTypes) {
+export default function Home({  allInvoices, sheds }: PropTypes) {
 
+  const [shed, setShed] = useState<string>(sheds[0] ?? "");
   const [date, setDate] = useState<string>((new Date()).toISOString().substr(0, 10));
   const [invoices, setInvoices] = useState<InvoiceType[]>(allInvoices);
 
@@ -51,13 +60,13 @@ export default function Home({  allInvoices }: PropTypes) {
       const month = String(cdate.getMonth() + 1).padStart(2, '0');
       const day = String(cdate.getDate()).padStart(2,'0');
 
-      let filteredInvoices = allInvoices.filter((inv:InvoiceType) => inv.date == `${year}-${month}-${day}`);
+      let filteredInvoices = allInvoices.filter((inv:InvoiceType) => (inv.date == `${year}-${month}-${day}` && inv.shed == shed));
 
       setInvoices(filteredInvoices);
     }
 
 
-  },[date])
+  },[date , shed])
 
   function numberWithCommas(x:number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -152,20 +161,39 @@ export default function Home({  allInvoices }: PropTypes) {
       <section className="text-center">
         <h1>Report</h1>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <div>
+            <label>Select Shed: </label>
+            <select
+              name="shed_no"
+              className="w-80"
+              onChange={(e) => {
+                setShed(e.target.value);
+              }}
+              value={shed}
+            >
+              {sheds.map((shed, i) => (
+                <option key={i} value={shed}>
+                  {shed}
+                </option>
+              ))}
+            </select>
+          </div>
       </section>
 
       {invoices?.length && <section id="table">
         <table cellSpacing={10} cellPadding={4} >
             <thead>
                 <tr>
+                    <th>Shed</th>
+                    <th>House no</th>
                     <th>Broker name</th>
                     <th>Driver Name</th>
                     <th>Vehicle Number</th>
+                    <th>Net Wgt</th>
+                    <th>Total Amt</th>
                     <th>Cash</th>
                     <th>Online</th>
                     <th>Total Advance</th>
-                    <th>Net Wgt</th>
-                    <th>Total Amt</th>
                     <th>Credit</th>
                     <th>Comission</th>
                 </tr>
@@ -175,21 +203,23 @@ export default function Home({  allInvoices }: PropTypes) {
                 {invoices.map((invoice, i) => {
 
                 return <tr key={i}>
+                    <td>{invoice.shed}</td>
+                    <td>{invoice.house_no}</td>
                     <td>{invoice.broker_name}</td>
                     <td>{invoice.driver_name}</td>
                     <td>{invoice.vehicle_no}</td>
+                    <td>{getNetWeight(invoice)}</td>
+                    <td>{getTotalAmount(invoice)}</td>
                     <td>{invoice.cash}</td>
                     <td>{invoice.online}</td>
                     <td>{getTotalAdvance(invoice)}</td>
-                    <td>{getNetWeight(invoice)}</td>
-                    <td>{getTotalAmount(invoice)}</td>
                     <td>{getBalance(invoice)}</td>
                     <td>{invoice.commission}</td>
                 </tr>}
                 )}
 
                 <tr>
-                    <th colSpan={2}>Total</th>
+                    <th colSpan={5}>Total</th>
 
                     <th>{numberWithCommas(totalCash())}</th>
                     <th>{numberWithCommas(totalOnline())}</th>
