@@ -50,23 +50,29 @@ interface PropTypes {
 export default function Home({  allInvoices, sheds }: PropTypes) {
 
   const [shed, setShed] = useState<string>(sheds[0] ?? "");
-  const [date, setDate] = useState<string>((new Date()).toISOString().substr(0, 10));
+  const [startDate, setStartDate] = useState<string>((new Date()).toISOString().substr(0, 10));
+  const [endDate, setEndDate] = useState<string>((new Date()).toISOString().substr(0, 10));
   const [invoices, setInvoices] = useState<InvoiceType[]>(allInvoices);
 
   useEffect(() => {
     if(allInvoices?.length){
-      const cdate = new Date(date);
-      const year = cdate.getFullYear();
-      const month = String(cdate.getMonth() + 1).padStart(2, '0');
-      const day = String(cdate.getDate()).padStart(2,'0');
+      const cdate = new Date(startDate);
+      const edate = new Date(endDate);
 
-      let filteredInvoices = allInvoices.filter((inv:InvoiceType) => (inv.date == `${year}-${month}-${day}` && inv.shed == shed));
+      // const year = cdate.getFullYear();
+      // const eyear = edate.getFullYear();
+      // const month = String(cdate.getMonth() + 1).padStart(2, '0');
+      // const emonth = String(edate.getMonth() + 1).padStart(2, '0');
+      // const day = String(cdate.getDate()).padStart(2,'0');
+      // const edat = String(edate.getDate()).padStart(2,'0');
+
+      let filteredInvoices = allInvoices.filter((inv:InvoiceType) => ((new Date(inv.date)) >= cdate  && (new Date(inv.date)) <= edate  && inv.shed == shed));
 
       setInvoices(filteredInvoices);
     }
 
 
-  },[date , shed])
+  },[startDate, endDate , shed])
 
   function numberWithCommas(x:number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -147,6 +153,88 @@ export default function Home({  allInvoices, sheds }: PropTypes) {
   };
 
 
+  const exportToExcel = async () => {
+    if (!invoices?.length) return;
+    const XLSX = await import("xlsx");
+  
+    // Header row exactly as your table
+    const headers = [
+      "Shed",
+      "House no",
+      "Date",
+      "Broker name",
+      "Driver Name",
+      "Vehicle Number",
+      "Net Wgt",
+      "Total Amt",
+      "Cash",
+      "Online",
+      "Total Advance",
+      "Credit",
+      "Comission", // keep your current spelling
+    ];
+  
+    // Data rows mirroring the table
+    const dataRows = invoices.map((inv) => [
+      inv.shed,
+      inv.house_no,
+      inv.date,
+      inv.broker_name,
+      inv.driver_name,
+      inv.vehicle_no,
+      getNetWeight(inv),
+      getTotalAmount(inv),
+      inv.cash,
+      inv.online,
+      getTotalAdvance(inv),
+      getBalance(inv),
+      inv.commission,
+    ]);
+  
+    // Totals row aligned to the same columns
+    const totalsRow = [
+      "Total", // label in first column; blanks for non-numeric columns
+      "",
+      "",
+      "",
+      "",
+      "",
+      totalnetwgt(),
+      totalamt(),
+      totalCash(),
+      totalOnline(),
+      totalAdvance(),
+      totalbalance(),
+      totalcommission(),
+    ];
+  
+    const aoa = [headers, ...dataRows, totalsRow];
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+  
+    // Optional: nicer widths
+    (ws as any)["!cols"] = [
+      { wch: 10 }, // Shed
+      { wch: 10 }, // House no
+      { wch: 12 }, // Date
+      { wch: 18 }, // Broker name
+      { wch: 16 }, // Driver Name
+      { wch: 16 }, // Vehicle Number
+      { wch: 10 }, // Net Wgt
+      { wch: 12 }, // Total Amt
+      { wch: 10 }, // Cash
+      { wch: 10 }, // Online
+      { wch: 14 }, // Total Advance
+      { wch: 10 }, // Credit
+      { wch: 12 }, // Comission
+    ];
+  
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Report");
+    XLSX.writeFile(wb, "report.xlsx");
+  };
+  
+
+
 
 
   return (
@@ -160,7 +248,8 @@ export default function Home({  allInvoices, sheds }: PropTypes) {
       <div style={{ width: '100vw', background: '#fff', color: '#000'}}>
       <section className="text-center">
         <h1>Report</h1>
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /><br/>
+        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
         <div>
             <label>Select Shed: </label>
             <select
@@ -178,6 +267,22 @@ export default function Home({  allInvoices, sheds }: PropTypes) {
               ))}
             </select>
           </div>
+
+          <div style={{ marginTop: 12 }}>
+            <button
+              onClick={exportToExcel}
+              disabled={!invoices?.length}
+              style={{
+                padding: "8px 12px",
+                borderRadius: 6,
+                border: "1px solid #ddd",
+                cursor: invoices?.length ? "pointer" : "not-allowed",
+                background: invoices?.length ? "#f5f5f5" : "#fafafa",
+              }}
+            >
+              Export to Excel
+            </button>
+          </div>
       </section>
 
       {invoices?.length && <section id="table">
@@ -186,6 +291,7 @@ export default function Home({  allInvoices, sheds }: PropTypes) {
                 <tr>
                     <th>Shed</th>
                     <th>House no</th>
+                    <th>Date</th>
                     <th>Broker name</th>
                     <th>Driver Name</th>
                     <th>Vehicle Number</th>
@@ -203,23 +309,24 @@ export default function Home({  allInvoices, sheds }: PropTypes) {
                 {invoices.map((invoice, i) => {
 
                 return <tr key={i}>
-                    <td>{invoice.shed}</td>
-                    <td>{invoice.house_no}</td>
-                    <td>{invoice.broker_name}</td>
-                    <td>{invoice.driver_name}</td>
-                    <td>{invoice.vehicle_no}</td>
-                    <td>{getNetWeight(invoice)}</td>
-                    <td>{getTotalAmount(invoice)}</td>
-                    <td>{invoice.cash}</td>
-                    <td>{invoice.online}</td>
-                    <td>{getTotalAdvance(invoice)}</td>
-                    <td>{getBalance(invoice)}</td>
-                    <td>{invoice.commission}</td>
+                    <td className="text-center">{invoice.shed}</td>
+                    <td className="text-center">{invoice.house_no}</td>
+                    <td className="text-center">{invoice.date}</td>
+                    <td className="text-center">{invoice.broker_name}</td>
+                    <td className="text-center">{invoice.driver_name}</td>
+                    <td className="text-center">{invoice.vehicle_no}</td>
+                    <td className="text-center">{getNetWeight(invoice)}</td>
+                    <td className="text-center">{getTotalAmount(invoice)}</td>
+                    <td className="text-center">{invoice.cash}</td>
+                    <td className="text-center">{invoice.online}</td>
+                    <td className="text-center">{getTotalAdvance(invoice)}</td>
+                    <td className="text-center">{getBalance(invoice)}</td>
+                    <td className="text-center">{invoice.commission}</td>
                 </tr>}
                 )}
 
                 <tr>
-                    <th colSpan={5}>Total</th>
+                    <th colSpan={6} >Total</th>
 
                     <th>{numberWithCommas(totalCash())}</th>
                     <th>{numberWithCommas(totalOnline())}</th>
